@@ -38,19 +38,19 @@
               </a>
             </li>
             <li class="max-lg:border-b max-lg:border-gray-300 max-lg:py-3 px-3">
-              <a href='../pages/index.php'
+              <a href='index.php'
                 class="hover:text-blue-700 text-blue-700 block font-medium text-[15px]">Home</a>
             </li>
-            <li class="max-lg:border-b max-lg:border-gray-300 max-lg:py-3 px-3"><a href='../pages/delete-enrolment.php'
+            <li class="max-lg:border-b max-lg:border-gray-300 max-lg:py-3 px-3"><a href='delete-enrolment.php'
               class="hover:text-blue-700 text-slate-900 block font-medium text-[15px]">Delete Enrolment</a>
             </li>
-            <li class="max-lg:border-b max-lg:border-gray-300 max-lg:py-3 px-3"><a href='../pages/add-student.php'
+            <li class="max-lg:border-b max-lg:border-gray-300 max-lg:py-3 px-3"><a href='add-student.php'
               class="hover:text-blue-700 text-slate-900 block font-medium text-[15px]">Add Student</a>
             </li>
-            <li class="max-lg:border-b max-lg:border-gray-300 max-lg:py-3 px-3"><a href='../pages/enrol-student.php'
+            <li class="max-lg:border-b max-lg:border-gray-300 max-lg:py-3 px-3"><a href='enrol-student.php'
               class="hover:text-blue-700 text-slate-900 block font-medium text-[15px]">Enrol student</a>
             </li>
-            <li class="max-lg:border-b max-lg:border-gray-300 max-lg:py-3 px-3"><a href='../pages/update-student.php'
+            <li class="max-lg:border-b max-lg:border-gray-300 max-lg:py-3 px-3"><a href='update-student.php'
               class="hover:text-blue-700 text-slate-900 block font-medium text-[15px]">Edit Student</a>
             </li>
         

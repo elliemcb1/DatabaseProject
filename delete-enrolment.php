@@ -1,37 +1,53 @@
 <?php
-    include 'includes/Config.php';
+    include 'databases/Config.php';
     include 'includes/header.php';
 
-    $students = $conn->prepare('SELECT 
-    s.student_id,
-    s.student_name,
-    s.dob,
-    e.enrolment_id,
-    e.enrolment_date,
-    c.course_id,
-    c.course_name
-   FROM enrolment e
-   INNER JOIN student s ON e.fk_student = s.student_id
-   INNER JOIN course c ON e.fk_course = c.course_id
-   ORDER BY e.enrolment_date DESC
-   ');
-   $students->execute();
-   $students->store_result();
-   $students->bind_result($studentId, $studentName, $dob, $enrolId, $enrolDate, $courseId, $course);
+    // Handle deletion
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_enrolment_id'])) {
+        $deleteId = $_POST['delete_enrolment_id'];
 
+        $deleteEnrollment = $conn->prepare("DELETE FROM enrolment WHERE enrolment_id = ?");
+        if ($deleteEnrollment) {
+            $deleteEnrollment->bind_param("i", $deleteId);
+            if ($deleteEnrollment->execute()) {
+                echo "<p class='text-green-600 px-4 py-2 text-center'>Enrolment ID $deleteId deleted successfully.</p>";
+            } else {
+                echo "<p class='text-red-600 px-4 py-2 text-center'>Error: " . $deleteEnrollment->error . "</p>";
+            }
+            $deleteEnrollment->close();
+        } else {
+            echo "<p class='text-red-600 px-4 py-2 text-center'>Database error: " . $conn->error . "</p>";
+        }
+    }
+
+    // Fetch enrolment records
+    $student = $conn->prepare('SELECT 
+        s.student_id,
+        s.student_name,
+        s.dob,
+        e.enrolment_id,
+        e.enrolment_date,
+        c.course_id,
+        c.course_name
+        FROM enrolment e
+        INNER JOIN student s ON e.fk_student = s.student_id
+        INNER JOIN course c ON e.fk_course = c.course_id
+        ORDER BY e.enrolment_date DESC
+    ');
+
+    $student->execute();
+    $student->store_result();
+    $student->bind_result($studentId, $studentName, $dob, $enrolId, $enrolDate, $courseId, $course);
 ?>
-<div class="bg-gray-100 px-4 py-2.5 gap-4">
-      <div class="flex items-center justify-center flex-wrap gap-y-2 gap-x-6 pr-7 text-center relative">
-        <p class="text-[15px] text-slate-900 font-medium leading-relaxed">DELETE AN ENROLMENT RECORD</p>
-      </div>
-    </div>
 
-<!-- 
-Edit this table so that there is a Delete button. When clicked, it removes an enrolment record from the database,
-you will also create the backend logic to handle the deletion of the record.
- -->
- <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
+<div class="bg-gray-100 px-4 py-2.5 gap-4">
+    <div class="flex items-center justify-center flex-wrap gap-y-2 gap-x-6 pr-7 text-center relative">
+        <p class="text-[15px] text-slate-900 font-medium leading-relaxed">DELETE AN ENROLMENT RECORD</p>
+    </div>
+</div>
+
+<div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-100 whitespace-nowrap">
             <tr>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider" scope="col">ID</th>
@@ -40,24 +56,27 @@ you will also create the backend logic to handle the deletion of the record.
                 <th class="px-4 py-4 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider" scope="col">Enrolled On</th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider" scope="col">Course Name</th>
                 <th class="px-4 py-4 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider" scope="col">Delete</th>
-
             </tr>
         </thead>
         <tbody>
-        <?php while ($students->fetch()): ?>
+        <?php while ($student->fetch()): ?>
             <tr>
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium"><?= $studentId ?></td>
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium"><?= $studentName ?></td>
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium"><?= $dob ?></td>
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium"><?= $enrolDate ?></td>
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium"><?= $course ?></td>
-                <!-- add button here -->
+                <td class="px-4 py-4 text-sm text-slate-900 font-medium">
+                    <form method="POST" action="" onsubmit="return confirm('Are you sure you want to delete this enrolment?');">
+                        <input type="hidden" name="delete_enrolment_id" value="<?= $enrolId ?>">
+                        <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                    </form>
+                </td>
             </tr>
-        <?php endwhile ?>
+        <?php endwhile; ?>
         </tbody>
     </table>
 </div>
-
 
 <?php
     include 'includes/footer.php';
