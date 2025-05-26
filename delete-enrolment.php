@@ -17,7 +17,7 @@ $student = $conn->prepare('SELECT
     FROM enrolment e
     INNER JOIN student s ON e.fk_student = s.student_id
     INNER JOIN course c ON e.fk_course = c.course_id
-    ORDER BY e.enrolment_date 
+    ORDER BY e.enrolment_date DESC
 ');
 
 $student->execute();

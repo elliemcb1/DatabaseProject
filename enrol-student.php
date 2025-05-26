@@ -5,13 +5,15 @@ include 'includes/header.php';
 
 
 
-// Fetch students
+ // bring in students stored in the database
+
 $student = $conn->prepare('SELECT student_id, student_name FROM student');
 $student->execute();
 $student->store_result();
 $student->bind_result($studentId, $studentName);
 
-// Fetch courses
+ // bring in courses stored in the database
+
 $course = $conn->prepare('SELECT course_id, course_name FROM course');
 $course->execute();
 $course->store_result();

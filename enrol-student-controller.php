@@ -1,8 +1,11 @@
 <?php
+//database connection
 include 'databases/Config.php';
 
-
-$Enroll_student = $conn->prepare("INSERT INTO enrolment (fk_student, fk_course, enrolment_date, active) VALUES (?, ?, ?, ?)");
+// prepered  Insertsql statment
+$Enroll_student = $conn->prepare("INSERT 
+INTO enrolment (fk_student, fk_course, enrolment_date, active) 
+VALUES (?, ?, ?, ?)");
 
 $Enroll_student->bind_param(
     "iisi", 

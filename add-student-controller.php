@@ -3,7 +3,7 @@
 include 'databases/Config.php';
 
 
- // Prepered SQL statment to insert into the databased
+ // Prepered  insertSQL statment 
     $insert_student = $conn->prepare(
         "INSERT 
         INTO `student` (`student_id`, `student_name`, `dob`, `address`, `tel`)
