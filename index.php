@@ -1,8 +1,9 @@
 <?php
+ // database config file to connect database
     include 'databases/Config.php';
     include 'includes/header.php';
 
-    // querying the tables to return information about the student and the course that they are enrolled on
+
  $students = $conn->prepare('SELECT 
  s.student_id,
  s.student_name,

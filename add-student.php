@@ -1,4 +1,5 @@
 <?php
+ // database config file to connect database
 include 'databases/Config.php';
 include 'includes/header.php';
 ?>
@@ -10,7 +11,7 @@ include 'includes/header.php';
 </div>
 
 <!-- HTML FORM -->
-<form method="POST" action="">
+<form method="POST" action="add-student-controller.php">
   <input type="text" name="student_id" placeholder="Student ID" required><br>
   <input type="text" name="student_name" placeholder="Student Name" required><br>
   <input type="date" name="dob" required><br>
@@ -19,37 +20,6 @@ include 'includes/header.php';
   <button type="submit">Submit</button>
 </form>
 
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get values from POST
-    $student_id = $_POST["student_id"];
-    $student_name = $_POST["student_name"];
-    $dob = $_POST["dob"];
-    $address = $_POST["address"];
-    $tel = $_POST["tel"];
 
-    // Prepare statement
-    $insert_student = $conn->prepare(
-        "INSERT INTO `student` (`student_id`, `student_name`, `dob`, `address`, `tel`) VALUES (?, ?, ?, ?, ?)"
-    );
-
-    if ($insert_student === false) {
-        echo "<p>Prepare failed: " . $conn->error . "</p>";
-        exit;
-    }
-
-    // Bind parameters
-    $insert_student->bind_param("sssss", $student_id, $student_name, $dob, $address, $tel);
-
-    // Execute statement
-    if ($insert_student->execute()) {
-        echo "<p class='text-green-600 text-center'>Student added successfully.</p>";
-    } else {
-        echo "<p class='text-red-600 text-center'>Error: " . $insert_student->error . "</p>";
-    }
-
-    $insert_student->close();
-}
-?>
 
 <?php include 'includes/footer.php'; ?>

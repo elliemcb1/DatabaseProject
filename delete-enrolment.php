@@ -1,43 +1,28 @@
 <?php
-    include 'databases/Config.php';
-    include 'includes/header.php';
+ // database config file to connect database
+include 'databases/Config.php';
+include 'includes/header.php';
 
-    // Handle deletion
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_enrolment_id'])) {
-        $deleteId = $_POST['delete_enrolment_id'];
 
-        $deleteEnrollment = $conn->prepare("DELETE FROM enrolment WHERE enrolment_id = ?");
-        if ($deleteEnrollment) {
-            $deleteEnrollment->bind_param("i", $deleteId);
-            if ($deleteEnrollment->execute()) {
-                echo "<p class='text-green-600 px-4 py-2 text-center'>Enrolment ID $deleteId deleted successfully.</p>";
-            } else {
-                echo "<p class='text-red-600 px-4 py-2 text-center'>Error: " . $deleteEnrollment->error . "</p>";
-            }
-            $deleteEnrollment->close();
-        } else {
-            echo "<p class='text-red-600 px-4 py-2 text-center'>Database error: " . $conn->error . "</p>";
-        }
-    }
 
-    // Fetch enrolment records
-    $student = $conn->prepare('SELECT 
-        s.student_id,
-        s.student_name,
-        s.dob,
-        e.enrolment_id,
-        e.enrolment_date,
-        c.course_id,
-        c.course_name
-        FROM enrolment e
-        INNER JOIN student s ON e.fk_student = s.student_id
-        INNER JOIN course c ON e.fk_course = c.course_id
-        ORDER BY e.enrolment_date DESC
-    ');
 
-    $student->execute();
-    $student->store_result();
-    $student->bind_result($studentId, $studentName, $dob, $enrolId, $enrolDate, $courseId, $course);
+$student = $conn->prepare('SELECT 
+    s.student_id,
+    s.student_name,
+    s.dob,
+    e.enrolment_id,
+    e.enrolment_date,
+    c.course_id,
+    c.course_name
+    FROM enrolment e
+    INNER JOIN student s ON e.fk_student = s.student_id
+    INNER JOIN course c ON e.fk_course = c.course_id
+    ORDER BY e.enrolment_date 
+');
+
+$student->execute();
+$student->store_result();
+$student->bind_result($studentId, $studentName, $dob, $enrolId, $enrolDate, $courseId, $course);
 ?>
 
 <div class="bg-gray-100 px-4 py-2.5 gap-4">
@@ -67,7 +52,7 @@
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium"><?= $enrolDate ?></td>
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium"><?= $course ?></td>
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium">
-                    <form method="POST" action="" onsubmit="return confirm('Are you sure you want to delete this enrolment?');">
+                    <form method="POST" action="delete-enrolment-controller.php" onsubmit="return confirm('Are you sure you want to delete this enrolment?');">
                         <input type="hidden" name="delete_enrolment_id" value="<?= $enrolId ?>">
                         <button type="submit" class="text-red-600 hover:underline">Delete</button>
                     </form>
@@ -78,6 +63,4 @@
     </table>
 </div>
 
-<?php
-    include 'includes/footer.php';
-?>
+<?php include 'includes/footer.php'; ?>

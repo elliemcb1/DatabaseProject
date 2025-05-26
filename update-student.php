@@ -1,6 +1,18 @@
 <?php
+ // database config file to connect database
 include 'databases/Config.php';
 include 'includes/header.php';
+$student_id = $_GET['sid'] ?? null;
+$student = null;
+
+if ($student_id) {
+
+    $stmt = $conn->prepare("SELECT * FROM student WHERE student_id = ?");
+    $stmt->bind_param("i", $student_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $student = $result->fetch_assoc();
+}
 ?>
 
 <div class="bg-gray-100 px-4 py-2.5 gap-4">
@@ -9,35 +21,8 @@ include 'includes/header.php';
   </div>
 </div>
 
-<?php
-// Get student ID from the URL if available
-$student_id = isset($_GET['sid']) ? $_GET['sid'] : null;
 
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize input
-    $student_name = $_POST['student_name'];
-    $dob = $_POST['dob'];
-    $address = $_POST['address'];
-    $tel = $_POST['tel'];
-    $student_id = $_POST['student_id']; // Use from form
 
-    // Prepare the update statement
-    $updateStudent = $conn->prepare("UPDATE student SET student_name = ?, dob = ?, address = ?, tel = ? WHERE student_id = ?");
-    if ($updateStudent) {
-        $updateStudent->bind_param("ssssi", $student_name, $dob, $address, $tel, $student_id);
-        if ($updateStudent->execute()) {
-            echo "<p style='color:green;'>Student updated successfully!</p>";
-        } else {
-            echo "<p style='color:red;'>Error executing update: " . $updateStudent->error . "</p>";
-        }
-    } else {
-        echo "<p style='color:red;'>Error preparing statement: " . $conn->error . "</p>";
-    }
-}
-?>
-
-<!-- Update Form -->
 <form method="POST" action="">
   <input type="text" name="student_id" placeholder="Student ID" value="<?php echo htmlspecialchars($student_id); ?>" required><br>
   <input type="text" name="student_name" placeholder="Student Name" required><br>
