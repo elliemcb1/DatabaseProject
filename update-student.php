@@ -2,17 +2,7 @@
  // database config file to connect database
 include 'databases/Config.php';
 include 'includes/header.php';
-$student_id = $_GET['sid'] ?? null;
-$student = null;
 
-if ($student_id) {
-
-    $stmt = $conn->prepare("SELECT * FROM student WHERE student_id = ?");
-    $stmt->bind_param("i", $student_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $student = $result->fetch_assoc();
-}
 ?>
 
 <div class="bg-gray-100 px-4 py-2.5 gap-4">
@@ -23,8 +13,8 @@ if ($student_id) {
 
 
 
-<form method="POST" action="">
-  <input type="text" name="student_id" placeholder="Student ID" value="<?php echo htmlspecialchars($student_id); ?>" required><br>
+<form method="POST" action="update-student-controller.php">
+  <input type="text" name="student_id" placeholder="Student ID" value=""><br>
   <input type="text" name="student_name" placeholder="Student Name" required><br>
   <input type="date" name="dob" required><br>
   <input type="text" name="address" placeholder="Address" required><br>

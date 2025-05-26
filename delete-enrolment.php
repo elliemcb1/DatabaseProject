@@ -52,8 +52,8 @@ $student->bind_result($studentId, $studentName, $dob, $enrolId, $enrolDate, $cou
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium"><?= $enrolDate ?></td>
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium"><?= $course ?></td>
                 <td class="px-4 py-4 text-sm text-slate-900 font-medium">
-                    <form method="POST" action="delete-enrolment-controller.php" onsubmit="return confirm('Are you sure you want to delete this enrolment?');">
-                        <input type="hidden" name="delete_enrolment_id" value="<?= $enrolId ?>">
+                    <form method="GET" action="delete-enrolment-controller.php" onsubmit="return confirm('Are you sure you want to delete this enrolment?');">
+                       <input type="hidden" name="eid" value="<?= $enrolId ?>">
                         <button type="submit" class="text-red-600 hover:underline">Delete</button>
                     </form>
                 </td>

@@ -5,14 +5,16 @@ include 'databases/Config.php';
 
  // Prepered SQL statment to insert into the databased
     $insert_student = $conn->prepare(
-        "INSERT INTO `student` (`student_id`, `student_name`, `dob`, `address`, `tel`) VALUES (?, ?, ?, ?, ?)"
+        "INSERT 
+        INTO `student` (`student_id`, `student_name`, `dob`, `address`, `tel`)
+         VALUES (?, ?, ?, ?, ?)"
     );
 
 //Binding paramaters  
-    $insert_student->bind_param("sssss", $student_id, $student_name, $dob, $address, $tel);
+    $insert_student->bind_param("sssss", $_POST['student_id'], $_POST['student_name'], $_POST['dob'], $_POST['address'], $_POST['tel']);
 // sucessful execute
     $insert_student->execute();
     
-header("Location: add-customer.php");
+header("Location: add-student.php");
 
 ?>
